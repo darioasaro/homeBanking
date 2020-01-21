@@ -2,6 +2,17 @@
 var dinero;
 var saldoCuenta =  0 ; 
 var limiteExtraccion = 5000 ;
+var nombreUsuario = " "
+var usuarios = [
+    {
+        nombre : "dario",
+        passw : 1234
+    },
+    {
+        nombre : "pepe",
+        passw : 4567
+    }
+]
 
 var servicios = [
     {
@@ -25,46 +36,51 @@ var servicios = [
     estaPago : false
 }
 ]
-
-var cuentas = [
+    var cuentas = new Array()
+    cuentas = [
     {
-        nombre : "Pedro",
+        nombre : "pedro",
         numero : 123
     },
 
     {
-        nombre : "Juan",
+        nombre : "juan",
         numero : 456
     },
 
     {
-        nombre : "Maria",
+        nombre : "maria",
         numero : 789
     },
 
     {
-        nombre : "Maria",
+        nombre : "luciana",
         numero : 000
     }
 ]
 //Ejecución de las funciones que actualizan los valores de las variables en el HTML.
 window.onload = function() {
+    iniciarSesion();
     cargarNombreEnPantalla();
-    actualizarSaldoEnPantaantidad_totallla();
+    actualizarSaldoEnPantalla();
     actualizarLimiteEnPantalla();
 }
 
 
 //Funciones que tenes que completar
 function cambiarLimiteDeExtraccion() {
-    limite = prompt("ingrese su nuevo limite")
+   var limite = prompt("ingrese su nuevo limite")
+   
     if((limite > 0) && (limite < saldoCuenta)){
         limiteExtraccion = limite
+        flag = 1
         }
     else{
-        alert("ingrese un limite correcto")
-        cambiarLimiteDeExtraccion()
-    }
+        alert("ingrese un limite correcto inferior a:$"+saldoCuenta)
+
+        
+    
+}
 
     actualizarLimiteEnPantalla(limiteExtraccion)
 
@@ -180,31 +196,68 @@ function transferirDinero() {
     var receptor = prompt("ingrese el nombre de la cuenta a la que desea transferir")
     
     var cuentaReceptor = parseInt( prompt("ingrese el numero de cuenta"))
-    console.log(receptor)
-    console.log(cuentaReceptor);
-    var user = {
+    
+    let usuario = {
         nombre : receptor,
         numero : cuentaReceptor
     }
-    
 
-    // if(){
-    //     debugger
-    //     var monto = parseInt (prompt("ingrese el monto que desea transferir"))
-    //     if(monto < saldoCuenta){
-    //         alert("seran descontados de su cuenta $" + monto)
-    //         saldoCuenta -= monto
-    //         actualizarSaldoEnPantalla(saldoCuenta)
+    usuario.nombre = usuario.nombre.toLowerCase()
+    let comp = cuentas.find(element=>{
+        return element.nombre === usuario.nombre;
+    })
+   
+    if((comp.nombre === usuario.nombre)&&(comp.numero === usuario.numero)){
+       
+        var monto = parseInt (prompt("ingrese el monto que desea transferir"))
+        if(monto < saldoCuenta){
+            alert("seran descontados de su cuenta $" + monto)
+            saldoCuenta -= monto
+            actualizarSaldoEnPantalla(saldoCuenta)
 
-    //     }
-    // }
-    // else{
-    //     alert("Cuenta erronea")
-    // }
+        }
+
+    }
+    else{
+        alert("Cuenta erronea")
+    }
 
 }
 
 function iniciarSesion() {
+   
+    let flag = 0;
+    
+    while(flag == 0){
+        let user = prompt("ingrese nombre de usuario")
+        let pass = prompt("ingrese contraseña")
+
+        debugger
+        
+        let user2 = {
+            nombre : user,
+            passw : pass
+        }
+
+        user2.nombre = user2.nombre.toLowerCase()
+    let compa = usuarios.find(element=>{
+        return element.nombre === user2.nombre;
+    })
+   
+
+        if((user2.nombre == compa.nombre)&&(user2.passw == compa.passw)){
+            alert("Bienvenido "+ user2.nombre)
+            nombreUsuario = user2.nombre
+            cargarNombreEnPantalla()
+            flag = 1
+        }
+        else{
+            confirm("Usuario y/o contraseña incorrecto")
+            
+        }
+    }
+    
+
 
 }
 

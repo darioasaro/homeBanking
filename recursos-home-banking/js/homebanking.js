@@ -15,7 +15,13 @@
         {
             nombre : "pepe",
             passw : 4567
+        },
+        
+        {
+            nombre : "luciana",
+            passw : 303456
         }
+
     ]
 
 //arreglo de servicios
@@ -93,21 +99,25 @@ function cambiarLimiteDeExtraccion() {
 
         actualizarLimiteEnPantalla(limiteExtraccion)
 }
-
+//extrae dinero de la cuenta validando fondos y limite de extraccion
 function extraerDinero() {
 
     cantidad  =  parseInt(prompt("ingrese cantidad (deben ser multiplos de 100)"))
 
     if( (cantidad % 100) == 0 && cantidad < limiteExtraccion && cantidad < saldoCuenta){
+        confirm("Usted extraera $"+cantidad+" de su cuenta")
         saldoCuenta -= cantidad
         actualizarSaldoEnPantalla(saldoCuenta)
     }
 
+    else if(cantidad > saldoCuenta){
+        alert("No dispone de fondos, su saldo es de :$"+ saldoCuenta)
+    }
     else{
-        alert("su transaccion no puede ser completada, intente nuevamente")
+        alert("Su transaccion no puede ser completada,intente nuevamente")
     }
 }
-
+//ingresa el dinero indicado en la cuenta del usuario
 function depositarDinero() {
 
     dinero = parseInt (prompt("ingrese la cantidad de dinero"))
@@ -122,7 +132,8 @@ function sumarDinero(dinero){
     actualizarSaldoEnPantalla(saldoCuenta)
 
 }
-
+//gestiona el pago de servicios y descuenta el importe validando los fondos
+// *** se uso SWITCH por consigna ***
 function pagarServicio() {
 
     var mensaje = "ingrese que servicio desea abonar : \n 1.luz \n 2.gas  \n 3.internet  \n 4.celular"
@@ -203,7 +214,7 @@ function pagarServicio() {
   }
 
 }
-
+//transfiere dinero de la cuenta del usuario a una cuenta validada y registrada.
 function transferirDinero() {
 
     var receptor = prompt("ingrese el nombre de la cuenta a la que desea transferir")
@@ -216,27 +227,27 @@ function transferirDinero() {
     }
 
     usuario.nombre = usuario.nombre.toLowerCase()
-    let comp = cuentas.find(element=>{
+    let comp = cuentas.find(element=>{              //busca en las cuentas si esta registrada
         return element.nombre === usuario.nombre;
     })
 
-    if((comp.nombre === usuario.nombre)&&(comp.numero === usuario.numero)){
+    if((comp.nombre == receptor)&&(comp.numero == cuentaReceptor)){
 
         var monto = parseInt (prompt("ingrese el monto que desea transferir"))
+        
         if(monto < saldoCuenta){
             alert("seran descontados de su cuenta $" + monto)
             saldoCuenta -= monto
             actualizarSaldoEnPantalla(saldoCuenta)
-
         }
-
     }
+    
     else{
         alert("Cuenta erronea")
     }
 
 }
-
+//gestiona el inicio de sesion validando usuario y contraseña
 function iniciarSesion() {
 
     let flag = 0;
@@ -261,16 +272,28 @@ function iniciarSesion() {
             alert("Bienvenido "+ user2.nombre)
             nombreUsuario = user2.nombre
             cargarNombreEnPantalla()
+            let btn = document.getElementById('exit');
+            btn.style.display = 'inline';
             flag = 1
         }
         else{
             confirm("Usuario y/o contraseña incorrecto")
+            saldoCuenta = 0;
 
         }
     }
 
 
 
+}
+//cierre de sesion
+function logOut(){
+    let ex = confirm("Desea cerrar su cuenta?")
+
+    if(ex){
+        //logica de eliminado de datos en storage si estuviese en uso
+        location.reload()
+    }
 }
 
 //Funciones que actualizan el valor de las variables en el HTML
